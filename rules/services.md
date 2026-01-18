@@ -132,9 +132,12 @@ expose:
       send_timeout: 60000         # Send timeout (ms, 0-60000)
       next_tries: 3               # Retry attempts
       next_timeout: 0             # Retry timeout (ms)
-      next_cases:                 # Retry conditions
+      next_cases:                 # Retry conditions (all values must be strings)
         - error
         - timeout
+        - "500"                   # HTTP status codes must be quoted
+        - "502"
+        - "503"
 ```
 
 ### credentials (optional)

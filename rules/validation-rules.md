@@ -63,17 +63,27 @@ expose:
 | `send_timeout` | 0-60000 ms | 60000 |
 | `next_tries` | 0-10 | 3 |
 | `next_timeout` | 0-60000 ms | 0 |
+| `next_cases` | Array of strings | `["error", "timeout"]` |
 
 ```yaml
 # Valid
 http_options:
   max_body_size: 52428800     # 50MB
   read_timeout: 30000         # 30 seconds
+  next_cases:
+    - error
+    - timeout
+    - "502"                   # HTTP status codes must be quoted strings
+    - "503"
+    - "504"
 
 # Invalid
 http_options:
   max_body_size: 200000000    # Error: exceeds 100MB limit
   read_timeout: 120000        # Error: exceeds 60000ms limit
+  next_cases:
+    - 502                     # Error: numbers must be quoted as strings
+    - 503
 ```
 
 ## Pricing Constraints
@@ -393,6 +403,7 @@ deployment:
 | Port range | 1-65535 |
 | Timeout range | 0-60000ms |
 | Body size | 0-104857600 bytes (100MB) |
+| next_cases | All values must be strings (quote HTTP status codes) |
 | Price denom | `uakt` or `ibc/...` pattern |
 | Price amount | Positive integer |
 | RAM storage | Cannot be persistent |
